@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use crate::{GreetTimer, WinSize};
 
-const BALLE_SPRITE: &str = "balle.png"; // c'est la balle
+const BALLE_SPRITE: &str = "boule.png"; // c'est la balle
 
 // ================================= components
 pub struct BallePlugin;
@@ -34,8 +34,8 @@ fn spawn_balle(
         .spawn_bundle(SpriteBundle {
             texture: asset_server.load(BALLE_SPRITE),
             transform: Transform {
-                translation: Vec3::new(0., 70., 10.),
-                scale: Vec3::new(0.031, 0.031, 1.),
+                translation: Vec3::new(0., 0., 10.),
+                // scale: Vec3::new(0.031, 0.031, 1.),
                 ..Default::default()
             },
             ..Default::default()
@@ -46,10 +46,11 @@ fn spawn_balle(
 
 // ============================================= systems
 
-fn greet_balle(time: Res<Time>, mut timer: ResMut<GreetTimer>, query: Query<&Name, With<Balle>>) {
+fn greet_balle(time: Res<Time>, mut timer: ResMut<GreetTimer>, query: Query<(&mut Transform, &Name, With<Balle>)>) {
     if timer.0.tick(time.delta()).just_finished() {
-        for name in query.iter() {
-            println!("boing : {}", name.0)
+        for (position, name, _) in query.iter() {
+            println!("boing : {}", name.0);
+            println!("position : {:?}", position)
         }
     }
 }
@@ -62,6 +63,7 @@ fn balle_down(
     for (mut position, _) in query.iter_mut() {
 
         if position.translation.y > -(win_size.height / 2.) {
+            // la balle tombe
             position.translation.y -= time.delta_seconds() * 100.;
         }
 
