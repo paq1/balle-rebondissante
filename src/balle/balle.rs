@@ -35,6 +35,7 @@ fn spawn_balle(
             texture: asset_server.load(BALLE_SPRITE),
             transform: Transform {
                 translation: Vec3::new(0., 70., 10.),
+                scale: Vec3::new(0.031, 0.031, 1.),
                 ..Default::default()
             },
             ..Default::default()
