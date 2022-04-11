@@ -1,7 +1,7 @@
 use bevy::prelude::*;
-use crate::GreetTimer;
+use crate::{GreetTimer, WinSize};
 
-const BALLE_SPRITE: &str = "player_a_01.png"; // c'est la balle
+const BALLE_SPRITE: &str = "balle.png"; // c'est la balle
 
 // ================================= components
 pub struct BallePlugin;
@@ -55,12 +55,14 @@ fn greet_balle(time: Res<Time>, mut timer: ResMut<GreetTimer>, query: Query<&Nam
 
 fn balle_down(
     time: Res<Time>,
-    mut query: Query<(&mut Transform, &Name, With<Balle>)>
+    win_size: Res<WinSize>,
+    mut query: Query<(&mut Transform, With<Balle>)>
 ) {
-    for (mut a, name, _) in query.iter_mut() {
-        a.translation.x += time.delta_seconds() * 100.;
-        // println!("{}", name.0);
+    for (mut position, _) in query.iter_mut() {
+
+        if position.translation.y > -(win_size.height / 2.) {
+            position.translation.y -= time.delta_seconds() * 100.;
+        }
+
     }
-    // let mut position = query.single_mut();
-    // position.translation.x += time.delta_seconds() * 100.;
 }

@@ -8,11 +8,15 @@ use crate::balle::balle::BallePlugin;
 
 struct GreetTimer(Timer);
 
+struct WinSize {
+    width: f32, height: f32
+}
+
 fn main() {
     App::new()
         .insert_resource(ClearColor(Color::rgb(0.04, 0.04,0.04)))
         .insert_resource(WindowDescriptor {
-            title: "balle rebondissante".to_string(),
+            title: "balle rebondissante".into(),
             width: 600.0,
             height: 600.0,
             vsync: false,
@@ -41,6 +45,12 @@ fn setup(
         Some(v) => v,
         _ => panic!("Pas de fenetre !!")
     };
+
+    commands
+        .insert_resource(WinSize {
+            width: window.width(),
+            height: window.height()
+        });
 
     window.set_position(IVec2::new(0, 0));
 }
